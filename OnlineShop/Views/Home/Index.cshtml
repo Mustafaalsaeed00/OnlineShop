@@ -1,0 +1,342 @@
+﻿@using OnlineShop.Models.Db
+@{
+    ViewData["Title"] = "Home Page";
+    var banners = ViewData["banners"] as List<Banner>;
+    var newProducts = ViewData["newProducts"] as List<Product>;
+    var bestSelling = ViewData["bestSelling"] as List<BestSellingFinal>;
+
+}
+<!--slider area start-->
+<section class="slider_section mb-63" style="margin-top:-240px">
+    <div class="slider_area slick_slider_activation"  data-slick='{
+    "slidesToShow": 1,
+    "slidesToScroll": 1,
+    "arrows": true,
+    "dots": true,
+    "autoplay": false,
+    "speed": 300,
+    "infinite": true
+    }'>
+        @if (banners != null)
+        {
+            var Sliders = banners.Where(b => b.Position == "Slider").OrderBy(b => b.Priority).ToList();
+            @foreach(var Slider in Sliders)
+            {
+                <div class="single_slider d-flex align-items-center" data-bgimg="images/banners/@Slider.ImageName">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-7">
+                                <div class="slider_text">
+                                    <span>Lookbook</span>
+                                    <h1>@Html.Raw(Slider.Title.Replace("\n" , "<br/>")) </h1>
+                                    <p>@Html.Raw(Slider.SubTitle.Replace("\n", "<br/>"))</p>
+                                    <a class="btn btn-primary" href=@Slider.Link>Explore Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+</section>
+<!--slider area end-->
+<!--shipping section start-->
+<section class="shipping_section mb-102">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="shipping_inner d-flex justify-content-between">
+                    <div class="single_shipping d-flex align-items-center">
+                        <div class="shipping_icon">
+                            <i class="icon-cursor icons"></i>
+                        </div>
+                        <div class="shipping_text">
+                            <h3>Free Shipping</h3>
+                            <p>Orders over $100</p>
+                        </div>
+                    </div>
+                    <div class="single_shipping d-flex align-items-center">
+                        <div class="shipping_icon">
+                            <i class="icon-reload icons"></i>
+                        </div>
+                        <div class="shipping_text">
+                            <h3>Free Returns</h3>
+                            <p>Within 30 days</p>
+                        </div>
+                    </div>
+                    <div class="single_shipping d-flex align-items-center">
+                        <div class="shipping_icon">
+                            <i class="icon-lock icons"></i>
+                        </div>
+                        <div class="shipping_text">
+                            <h3>100% Payment Secure</h3>
+                            <p>Payment Online</p>
+                        </div>
+                    </div>
+                    <div class="single_shipping d-flex align-items-center">
+                        <div class="shipping_icon">
+                            <i class="icon-tag icons"></i>
+                        </div>
+                        <div class="shipping_text">
+                            <h3>Affordable Price</h3>
+                            <p>Guaranteed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--shipping section end-->
+<!-- banner section start -->
+<section class="banner_section mb-109">
+    <div class="container" >
+        <div class="section_title mb-60">
+            <h2>featured collections</h2>
+        </div>
+
+        <div class="banner_container d-flex">
+
+            @if(banners != null) 
+            {
+
+                var banner1_List = banners.Where(b => b.Position == "Banner1").OrderBy(b => b.Priority).ToList();
+                bool secondBanner = false;
+                @foreach (var banner in banner1_List)
+                { 
+                    
+                    <figure class="single_banner position-relative mr-30"> 
+                        <img src="/images/banners/@banner.ImageName" alt="">
+                        <figcaption class="banner_text position-absolute">
+                            @if(secondBanner)
+                            {
+                                <h3 class="text-light">@Html.Raw(banner.Title.Replace("\n", "<br/>")) </h3>
+                                <p class="text-light">@Html.Raw(banner.SubTitle.Replace("\n", "<br/>"))</p>
+                            }
+                            else
+                            {
+                                <h3>@Html.Raw(banner.Title.Replace("\n", "<br/>")) </h3>
+                                <p>@Html.Raw(banner.SubTitle.Replace("\n", "<br/>"))</p>
+                            }
+                            @if(!string.IsNullOrEmpty(banner.Link)) 
+                            { 
+                                <a class="btn btn-primary" href="shop.html">Shop Now</a> 
+                            } 
+                        </figcaption> 
+                    </figure>
+                    secondBanner = true;
+                } 
+
+            }
+
+        </div>
+    </div>
+</section>
+<!-- banner section end -->
+<!-- product section start -->
+<section class="product_section mb-96">
+    <div class="container">
+        <div class="product_header d-flex justify-content-between  mb-50">
+            <div class="section_title">
+                <h2>best selling items</h2>
+            </div>
+
+        </div>
+        <div class="product_container row">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="all" role="tabpanel">
+                    <div class="product_slick slick_slider_activation" data-slick='{
+                    "slidesToShow": 4,
+                    "slidesToScroll": 1,
+                    "arrows": true,
+                    "dots": false,
+                    "autoplay": false,
+                    "speed": 300,
+                    "infinite": true,
+                    "responsive":[
+                    {"breakpoint":992, "settings": { "slidesToShow": 3 } },
+                    {"breakpoint":768, "settings": { "slidesToShow": 2 } },
+                    {"breakpoint":300, "settings": { "slidesToShow": 1 } }
+                    ]
+                    }'>
+                        @if (bestSelling != null && bestSelling.Any())
+                        {
+                            foreach (var Product in bestSelling)
+                            {
+                                <article class="col single_product">
+                                    <figure>
+                                        <div class="product_thumb">
+                                            <a href="/Product/ProductDetails/@Product.ProductId">
+                                                <img class="primary_img" src="~/images/products/@Product.ImageName"
+                                                     alt="consectetur">
+                                            </a>
+                                            <div class="product_action">
+                                                <ul>
+                                                    <li class="quick_view">
+                                                        <a data-toggle="modal" data-target="#modal_box"
+                                                           data-tippy="Quick View" href="#" data-tippy-inertia="true"
+                                                           data-tippy-delay="50" data-tippy-arrow="true"
+                                                           data-tippy-placement="left">
+                                                            <i class="icon-size-fullscreen icons"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="product_label">
+                                                @if (Product.Discount != null)
+                                                {
+                                                    var DiscountPercentage = Product.Discount / Product.Price * 100;
+                                                    <span>-@DiscountPercentage.GetValueOrDefault(0).ToString("F")%</span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <figcaption class="product_content text-center">
+                                            <h4 class="product_name">
+                                                <a href="/Product/ProductDetails/@Product.ProductId">
+                                                    @Product.Title
+                                                </a>
+                                            </h4>
+                                            <div class="price_box">
+                                                @{
+                                                    var CurrentPrice = Product.Price - Product.Discount;
+                                                }
+                                                <span class="current_price">$@CurrentPrice.GetValueOrDefault().ToString("F")</span>
+                                                <span class="old_price">$@Product.Price.GetValueOrDefault().ToString("F")</span>
+                                            </div>
+                                            <div class="add_to_cart">
+                                                <a class="btn btn-primary" onclick="updateCart(@Product.ProductId , 1)" data-tippy="Add To Cart"
+                                                   data-tippy-inertia="true" data-tippy-delay="50" data-tippy-arrow="true"
+                                                   data-tippy-placement="top">Add To Cart</a>
+                                            </div>
+                                        </figcaption>
+                                    </figure>
+                                </article>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- product section end -->
+<!-- banner section start -->
+<section class="banner_section banner_style2 mb-109">
+    <div class="container-fluid">
+        <div class="row">
+            @if (banners != null)
+            {
+                var banner2_List = banners.Where(b => b.Position == "Banner2").OrderBy(b=>b.Priority).ToList();
+
+                @foreach (var banner in banner2_List)
+                { 
+                   <div class="col-lg-6 col-md-6 col-sm-6">
+                    <figure class="single_banner position-relative">
+                    <img src="/images/banners/@banner.ImageName" alt="">
+                    <div class="banner_text position-absolute">
+                                <h3>@Html.Raw(banner.Title.Replace("\n", "<br/>")) </h3>
+                                <p>@Html.Raw(banner.SubTitle.Replace("\n", "<br/>"))</p>
+                        @if(!string.IsNullOrEmpty(@banner.Link))
+                        {
+                            <a class="btn btn-primary" href="shop.html">Shop Now</a>
+                        }
+                    </div>
+
+                    </figure>
+                </div>
+                } 
+            }
+            
+        </div>
+    </div>
+</section>
+<!-- banner section end -->
+<!-- product section start -->
+<section class="product_section mb-80">
+    <div class="container">
+        <div class="product_header d-flex justify-content-between  mb-60">
+            <div class="section_title">
+                <h2>new arrivals</h2>
+            </div>
+        </div>
+        <div class="product_container row">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="all2" role="tabpanel">
+                    <div class="product_slick slick_slider_activation" data-slick='{
+                            "slidesToShow": 4,
+                            "slidesToScroll": 1,
+                            "arrows": true,
+                            "dots": false,
+                            "autoplay": false,
+                            "speed": 300,
+                            "infinite": true,
+                            "responsive":[
+                              {"breakpoint":992, "settings": { "slidesToShow": 3 } },
+                              {"breakpoint":768, "settings": { "slidesToShow": 2 } },
+                              {"breakpoint":300, "settings": { "slidesToShow": 1 } }
+                             ]
+                        }'>
+                        @if(newProducts != null && newProducts.Any())
+                        {
+                            foreach(var Product in newProducts)
+                            {
+                                <article class="col single_product">
+                                    <figure>
+                                        <div class="product_thumb">
+                                                <a href="/Product/ProductDetails/@Product.Id">
+                                                <img class="primary_img" src="~/images/products/@Product.ImageName"
+                                                     alt="consectetur">
+                                            </a>
+                                            <div class="product_action">
+                                                <ul>
+                                                    <li class="quick_view">
+                                                        <a data-toggle="modal" data-target="#modal_box"
+                                                           data-tippy="Quick View" href="#" data-tippy-inertia="true"
+                                                           data-tippy-delay="50" data-tippy-arrow="true"
+                                                           data-tippy-placement="left">
+                                                            <i class="icon-size-fullscreen icons"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="product_label">
+                                                @if(Product.Discount != null)
+                                                    {
+                                                        var DiscountPercentage = Product.Discount / Product.Price * 100;
+                                                        <span>-@DiscountPercentage.GetValueOrDefault(0).ToString("F")%</span>
+                                                    }
+                                            </div>
+                                        </div>
+                                        <figcaption class="product_content text-center">
+                                            <h4 class="product_name">
+                                                    <a href="/Product/ProductDetails/@Product.Id">
+                                                    @Product.Title
+                                                </a>
+                                            </h4>
+                                            <div class="price_box">
+                                                    @{
+                                                        var CurrentPrice = Product.Price - Product.Discount;
+                                                    }
+                                                    <span class="current_price">$@CurrentPrice.GetValueOrDefault().ToString("F")</span>
+                                                    <span class="old_price">$@Product.Price.GetValueOrDefault().ToString("F")</span>
+                                            </div>
+                                            <div class="add_to_cart">
+                                                <a class="btn btn-primary" onclick="updateCart(@Product.Id , 1)"  data-tippy="Add To Cart"
+                                                   data-tippy-inertia="true" data-tippy-delay="50" data-tippy-arrow="true"
+                                                   data-tippy-placement="top">Add To Cart</a>
+                                            </div>
+                                        </figcaption>
+                                    </figure>
+                                </article>
+                            }
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- product section end -->

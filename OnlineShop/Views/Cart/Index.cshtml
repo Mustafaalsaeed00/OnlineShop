@@ -1,0 +1,131 @@
+﻿   @model List<ProductCartViewModel>
+ <!--breadcrumbs area start-->
+@* <div class="breadcrumbs_area breadcrumbs_other">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content text-center">
+                    <ul>
+                        <li><a href="index.html">home</a></li>
+                        <li><a href="#">pages</a></li>
+                    </ul>
+                    <h3>Shopping Cart</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> *@
+<!--breadcrumbs area end-->
+
+
+@if(Model is not null && Model.Any())
+{
+    <!--shopping cart area start -->
+    <div class="shopping_cart_area">
+        <div class="container mt-5">
+            <form action="#">
+                <div class="cart_page_inner mb-60">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="cart_page_tabel">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th >product </th>
+                                            <th >information</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr class="border-top" id="@item.Id">
+                                                <td>
+                                                    <div class="cart_product_thumb">
+                                                        <img src="~/images/products/@item.ImageName" alt="@item.ImageName">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="cart_product_text">
+                                                        <h4>@item.Title</h4>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="cart_product_price">
+                                                        <span>$@item.Price.GetValueOrDefault().ToString("F")</span>
+                                                    </div>
+                                                </td>
+                                                <td class="product_quantity">
+                                                    <div class="cart_product_quantity">
+                                                        <input min="1" max="100" value="@item.Count" type="number" onchange="updateCart(@item.Id , $(this).val())">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="cart_product_price">
+                                                        <span>$$@item.RowSumPrice.GetValueOrDefault().ToString("F")</span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="cart_product_remove text-right">
+                                                        <a onclick="updateCart(@item.Id , 0)"><i class="ion-android-close"></i></a>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="cart_page_button border-top d-flex justify-content-between">
+                                <div class="shopping_cart_btn">
+                                    <a href="/Cart/ClearCart" class="btn btn-primary border">CLEAR SHOPPING CART</a>
+                                    <a href="/Cart" class="btn btn-primary border">UPDATE YOUR CART</a>
+                                </div>
+                                <div class="shopping_continue_btn">
+                                    <a href="/Product" class="btn btn-primary border">CONTINUE SHOPPING</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--coupon code area start-->
+                <div class="cart_page_bottom">
+                    <div class="row d-flex justify-content-end">
+                        <div class="col-lg-4 col-md-6 col-sm-8">
+                            <div class="grand_totall_area">
+                                <div class="grand_totall_inner border-bottom">
+                                    <div class="cart_grandtotal d-flex justify-content-between">
+                                        <p>grand total</p>
+                                        <span>$@Model.Sum(x=> x.RowSumPrice)?.ToString("F")</span>
+                                    </div>
+                                </div>
+                                <div class="proceed_checkout_btn">
+                                    <a class="btn btn-primary" href="/Cart/Checkout">Proceed to Checkout</a>
+                                </div>
+                                <a href="#">Checkout with Mutilple Adresses</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--coupon code area end-->
+            </form>
+        </div>
+    </div>
+    <!--shopping cart area end -->
+}
+else
+{
+    <div style="margin-top:200px">
+        <div class="shopping_cart_area ">
+            <div class="container mt-5">
+                <div class="alert alert-danger" role="alert">
+                    Cart is Empty
+                </div>
+            </div>
+        </div>
+    </div>
+    
+}
+
