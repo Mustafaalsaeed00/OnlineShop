@@ -151,7 +151,7 @@ namespace OnlineShop.Controllers
 			MailMessage mail = new MailMessage();
 			SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
 
-			mail.From = new MailAddress("mustafadrive00@gmail.com");
+			mail.From = new MailAddress("");
 			mail.To.Add(foundUser.Email);
 			mail.Subject = "Recovery Code";
 			mail.Body = "Your Recovery Code is: " + foundUser.RecoveryCode;
