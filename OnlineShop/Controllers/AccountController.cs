@@ -157,7 +157,7 @@ namespace OnlineShop.Controllers
 			mail.Body = "Your Recovery Code is: " + foundUser.RecoveryCode;
 
 			smtpServer.Port = 587;
-			smtpServer.Credentials = new System.Net.NetworkCredential("mustafadrive00@gmail.com", "nsut bfec wskj ujsp");
+			smtpServer.Credentials = new System.Net.NetworkCredential("", "");
 			smtpServer.EnableSsl = true;
 			smtpServer.Send(mail);
 			//-------------------------------
